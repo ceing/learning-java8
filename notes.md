@@ -264,6 +264,43 @@ Optional<String> startsWithJ = stream.filter(str -> str.startsWith("J")).findFir
     System.out.println(">>>> first with J:" + startsWithJ.get());
 ```
 
+在并行中，如果想要找到任意一个并立即返回，那么可以使用findAny方法
+
+如果只是想知道流中是否有匹配的元素，那么可以使用anyMatch方法，接受一个predicate参数，返回一个boolean值：
+
+allMatch和noneMatch方法会遍历整个stream元素，判断全部符合指定的条件
+
+## Optional<T>
+
+Optional<T>是针对元素T进行的一个NonNullPointer的封装，它不会返回null。调用get方法的时候，如果存在被封装的对象，那么直接返回，如果为null，那么抛出NoSuchElementException。
+
+通过使用isPresent方法可以判断被包装的对象是否有值。
+
+通过使用ifPresent方法可以指定如果判断不为null后执行的操作:
+
+```
+startsWithJ.ifPresent(System.out::println); // 如果不为null,那么可以指定处理此值的函数
+```
+通过使用map方法对值进行转换操作：
+
+```
+Optional<String> withHello = startsWithJ.map(s -> String.format("Hello %s", s));
+    System.out.println(withHello.orElse(""));
+```
+
+
+通过使用Optional.of静态方法可以创建一个Optional对象，通过使用Optional.empty来创建一个空的Optional对象
+
+使用flatMap方法来组合连续的Optional对象:
+
+如果有一个会返回Optional<T>的方法f()，并且目标类型T有一个会返回Optional<U>的方法g，因为f()返回的是Optional对象，因此连续调用s.f().g()这样是不可取的，要达到连续调用的目标，只能通过flatMap方法，比如:
+
+Optional<U> = s.f().flatMap(T::g);
+
+## Reduce
+
+略
+
 
 
 

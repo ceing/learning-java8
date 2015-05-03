@@ -47,7 +47,17 @@ public final class StreamTest {
     Optional<String> startsWithJ = stream.filter(str -> str.startsWith("J")).findFirst();
     System.out.println(">>>> first with J:" + startsWithJ.get());
 
+    stream = Stream.of("Sam", "Jack", "Tom", "James", "Lucy", "David", "Betty");
+    startsWithJ = stream.parallel().filter(str -> str.startsWith("J")).findAny();
+    System.out.println(">>>> any with J:" + startsWithJ.get());
 
+    startsWithJ.ifPresent(System.out::println); // 如果不为null,那么可以指定处理此值的函数
+    Optional<String> withHello = startsWithJ.map(s -> String.format("Hello %s", s));
+    System.out.println(withHello.orElse(""));
+
+    stream = Stream.of("Sam", "Jack", "Tom", "James", "Lucy", "David", "Betty");
+    boolean hasStartsWithJ = stream.parallel().anyMatch(s -> s.startsWith("J"));
+    System.out.println(">>>> starts with j:" + hasStartsWithJ);
   }
 
   public static Stream<Character> charStream(String s) {
